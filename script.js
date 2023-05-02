@@ -18,7 +18,8 @@ let scrollCounter = 0;
 let activeLink = -1;
 const menuTextxOffset = 4;
 const menuTextyOffset = 3;
-let boxActive = false;
+let boxActive = true;
+const menuXBound = 30;
 
 const arr = [
 	"ben",
@@ -73,6 +74,9 @@ export function pre(context, cursor, buffer, data) {
 			} else if(activeLink === 1) {
 				window.open('https://drive.google.com/file/d/1SWXpejQXAzTf_rSRM2bH3WQ63EANR-U9/view?usp=sharing', '_blank');
 			}
+			else if(activeLink === 2){
+				boxActive = !boxActive;
+			}
 		}
 	}
 }
@@ -106,6 +110,8 @@ export function main(coord, context, cursor, buffer) {
 	//const i = ((a + b) + 2) / 4 // sum
 	const idx = floor(i * density.length)
 
+	const windowBounds = [ 5, 5, 20, 20 ]
+
 
 
 	//cursor displays unless hovering over link
@@ -114,11 +120,18 @@ export function main(coord, context, cursor, buffer) {
 	//Text Scroller
 	coord.y === 0 ? scrollingText[((coord.x - Math.floor(scrollCounter)) % scrollingText.length + scrollingText.length) % scrollingText.length] :
 	//menu line
-	coord.x === 30 ? '|' :
+	coord.x === menuXBound ? '|' :
 
 	coord.y === 1 ? ' ' :
 	//right area
-	coord.x > 30 ? density[idx] :
+	
+	coord.x > menuXBound ? 
+	boxActive ? 
+	coord.y >= windowBounds[1] + 2 && coord.y < windowBounds[1] + windowBounds[3] &&
+	coord.x >= windowBounds[0] + menuXBound && coord.x <= menuXBound + windowBounds[0] + windowBounds[2] ?
+	coord.x == menuXBound + windowBounds[0] || coord.x == menuXBound + windowBounds[0] + windowBounds[2] ? '|' : '.' : density[idx] :
+	
+	density[idx] :
 
 	//check if character within bounds of menu array
 	//check if y value is within bounds of menu array based on offset and length of array
