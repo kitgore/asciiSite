@@ -18,6 +18,7 @@ let scrollCounter = 0;
 let activeLink = -1;
 const menuTextxOffset = 4;
 const menuTextyOffset = 3;
+let boxActive = false;
 
 const arr = [
 	"ben",
