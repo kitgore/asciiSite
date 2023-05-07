@@ -93,14 +93,6 @@ export const pointerDown = () => {
   }
 };
 
-export const wheel = (delta) => {
-  if (windows.length > 0) {
-    const currentWindow = windows[windows.length - 1];
-    currentWindow.scrollOffset += delta;
-    currentWindow.scrollOffset = Math.min(Math.max(currentWindow.scrollOffset, 0), currentWindow.content.split('\n').length - currentWindow.size.height);
-  }
-};
-
 export function pre(context, cursor, buffer, data) {
 	scrollCounter -= 0.4; // speed
 	if (scrollCounter <= 0) {
@@ -194,18 +186,10 @@ function invert(char){
 function getMenuChar(coord, arr, activeLink, xOffset, yOffset, links) {
 	if (coord.y >= yOffset && coord.y < arr.length + yOffset && coord.x < arr[coord.y - yOffset].length + xOffset && coord.x >= xOffset) {
 		if (activeLink != -1 && coord.y === yOffset + links[activeLink] && coord.x >= xOffset && coord.x <= xOffset + arr[links[activeLink]].length) {
-		return {
-			char: arr[coord.y - yOffset].charAt(coord.x - xOffset),
-			color: css(66, 66, 112),
-			backgroundColor: css(195, 195, 219),
-		};
+		return invert(arr[coord.y - yOffset].charAt(coord.x - xOffset));
 	} 
 	else {
-		return {
-			char: arr[coord.y - yOffset].charAt(coord.x - xOffset),
-			color: css(195, 195, 219),
-			backgroundColor: css(66, 66, 112),
-		};
+		return normalize(arr[coord.y - yOffset].charAt(coord.x - xOffset));
 	}
 	}
 }
